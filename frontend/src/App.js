@@ -87,6 +87,7 @@ function App() {
                       <h3>{entry.title}</h3>
                       <p>{entry.comments}</p>
                       <small>Visited on: {new Date(entry.visitDate).toLocaleDateString()}</small>
+                      {entry.image && <img src={entry.image} alt={entry.title} />}
                     </div>
                   </Popup>
                 ) : null
