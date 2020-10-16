@@ -14,10 +14,30 @@ body {
 }
 
 .popup {
-  max-width: 400px;
+  max-width: 40vw;
+  padding: 1rem;
+}
+
+.popup img {
+  width: auto;
+  height: 200px;
+  text-align: center;
+  margin: 0 auto;
+  display: block;
 }
 
 .new-marker {
   stroke: #fff;
   transform: translate(-50%, -100%); 
+}
+
+.entry-form label, .entry-form input, .entry-form textarea, .entry-form button {
+  font-size: 1rem;
+  margin: 0.5rem 0;
+  display: block;
+  width: 100%;
+}
+
+.error {
+  color: #e30b5d;
 }

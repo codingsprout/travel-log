@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import ReactMapGL, { Marker, Popup } from 'react-map-gl';
 import { logEntry } from './Routes';
+import PopupForm from './PopupForm'
 
 
 const MAPBOX_TOKEN = 'pk.eyJ1IjoiaXFzeW1waGljIiwiYSI6ImNrZ2JqbTIxaTAwOGIyc3FveDF5cHZmamcifQ.SBWjlYgl1IOrOTniMH1wBw'
@@ -21,14 +22,14 @@ function App() {
     zoom: 3
   });
 
-  useEffect(() => {
-    (async() => {
-      const logEntries = await logEntry()
-      setLogEntries(logEntries)
-      console.log(logEntries) 
-    })()
+  const getEntries = async () => {
+    const logEntries = await logEntry()
+    setLogEntries(logEntries)
+  }
 
-  },[])
+  useEffect(() => {
+    getEntries()
+  }, [])
 
   const addMarkerPopUp = (event) => {
     console.log(event) 
@@ -49,9 +50,8 @@ function App() {
     
       {
         logEntries.map(entry => (
-          <>
+          <React.Fragment key={entry._id}>
             <Marker
-              key={entry._id} 
               latitude={entry.latitude} 
               longitude={entry.longitude}
             >
@@ -62,7 +62,7 @@ function App() {
                 })} //feel free to toggle
               >
                 <svg className="svg-marker"
-                  style={{ width: `${4 * viewport.zoom}px`, height: `${4 * viewport.zoom}px` }} 
+                  style={{ width: `${6 * viewport.zoom}px`, height: `${6 * viewport.zoom}px` }} 
                   viewBox="0 0 24 24" 
                   stroke-width="1.5" 
                   fill="none" 
@@ -92,7 +92,7 @@ function App() {
                 ) : null
 
               }
-            </>
+            </React.Fragment>
         ))
       }
       {
@@ -104,7 +104,7 @@ function App() {
             >
               <div>
                 <svg className="new-marker"
-                  style={{ width: `${4 * viewport.zoom}px`, height: `${4 * viewport.zoom}px` }} 
+                  style={{ width: `${6 * viewport.zoom}px`, height: `${6 * viewport.zoom}px` }} 
                   viewBox="0 0 24 24" 
                   stroke-width="1.5" 
                   fill="none" 
@@ -125,7 +125,13 @@ function App() {
               onClose={() => setAddEntryLocation(null)}
               anchor="top" >
               <div className="popup">
-                <h3>Where did you go this time?</h3>
+                <PopupForm 
+                  currentLocation={addEntryLocation}
+                  onClose={() => {
+                    setAddEntryLocation(null)
+                    getEntries()
+                  }} 
+                />
               </div>
             </Popup>
           </>
